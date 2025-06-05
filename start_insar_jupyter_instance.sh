@@ -22,13 +22,13 @@ mkdir -m 775 -p "$(pwd)/$PROJECTNAME/data"
 git clone https://github.com/conrad-blucher-institute/opensarlab_MintPy_Recipe_Book.git "$PROJECTNAME/home"
 
 # Start the Singularity instance with mounted home directory and specified hostname, and log the output
-singularity instance start -B $(pwd)/"${PROJECTNAME}"/home:/home/jovan --hostname $HOSTNAME earthscope_insar_oct_2024_latest.sif insar_jupyter_$USER  > "$PROJECTNAME/logs/singularity_start__${USER}_${HOSTNAME}.log" 2>&1
+singularity instance start -B $(pwd)/"${PROJECTNAME}"/home:/home/jovan --hostname $HOSTNAME earthscope_insar_oct_2024_latest.sif insar_jupyter_"${USER}"_"${PROJECTNAME}"  > "$PROJECTNAME/logs/singularity_start__${USER}_${HOSTNAME}.log" 2>&1
 
 # Check if singularity instance started successfully
 if [ $? -ne 0 ]; then
-    echo "Failed to start singularity instance. Check singularity_start_${HOSTNAME}.log for details."
+    echo "Failed to start singularity instance. Check ${PROJECTNAME}/logs/singularity_start_${HOSTNAME}.log for details."
     exit 1
 fi
 
 # Execute the Jupyter Notebook inside the Singularity instance
-singularity exec instance://insar_jupyter_$USER nohup /usr/local/bin/start-notebook.sh --NotebookApp.port=$PORT --NotebookApp.ip='0.0.0.0' --NotebookApp.notebook_dir="/work/CBI_InSAR/${PROJECTNAME}/home" --no-browser > "${PROJECTNAME}/logs/insar_jupyter_${USER}_${HOSTNAME}.log" 2>&1 &
+singularity exec instance://insar_jupyter_"${USER}"_"${PROJECTNAME}" nohup /usr/local/bin/start-notebook.sh --NotebookApp.port=$PORT --NotebookApp.ip='0.0.0.0' --NotebookApp.notebook_dir="/work/CBI_InSAR/${PROJECTNAME}/home" --no-browser > "${PROJECTNAME}/logs/insar_jupyter_${USER}_${HOSTNAME}.log" 2>&1 &
