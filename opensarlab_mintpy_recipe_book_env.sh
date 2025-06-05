@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
-env="opensarlab_mintpy_recipe_book"
-local=$1
+projectpath=$(dirname "$PWD")
+env="opensarlab_mintpy_recipe_book_"$(basename "$projectpath")
+local="$projectpath"/.local
 env_prefix=$local"/envs/"$env
 python_version=$(conda run -n $env python --version | cut -b 8-10)
 site_packages=$env_prefix"/lib/python"$python_version"/site-packages"

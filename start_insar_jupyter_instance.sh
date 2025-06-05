@@ -17,6 +17,7 @@ PORT=$3
 mkdir -m 775 -p "$(pwd)/$PROJECTNAME/logs"
 mkdir -m 775 -p "$(pwd)/$PROJECTNAME/home"
 mkdir -m 775 -p "$(pwd)/$PROJECTNAME/data"
+mkdir -m 775 -p "$(pwd)/$PROJECTNAME/home/.local/env"
 
 # Clone Git repo
 git clone https://github.com/conrad-blucher-institute/opensarlab_MintPy_Recipe_Book.git "$PROJECTNAME/home"
