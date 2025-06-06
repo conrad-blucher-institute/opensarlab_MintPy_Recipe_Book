@@ -32,4 +32,4 @@ if [ $? -ne 0 ]; then
 fi
 
 # Execute the Jupyter Notebook inside the Singularity instance
-singularity exec instance://insar_jupyter_"${USER}"_"${PROJECTNAME}" nohup /usr/local/bin/start-notebook.sh --NotebookApp.port=$PORT --NotebookApp.ip='0.0.0.0' --NotebookApp.notebook_dir="/work/CBI_InSAR/${PROJECTNAME}/home" --no-browser > "${PROJECTNAME}/logs/insar_jupyter_${USER}_${HOSTNAME}.log" 2>&1 &
+singularity exec --env JUPYTER_PATH="$(pwd)"/"${PROJECTNAME}"/.local/envs/opensar_mintpy_recipe_book instance://insar_jupyter_"${USER}"_"${PROJECTNAME}" nohup /usr/local/bin/start-notebook.sh --NotebookApp.port=$PORT --NotebookApp.ip='0.0.0.0' --NotebookApp.notebook_dir="/work/CBI_InSAR/${PROJECTNAME}/home" --no-browser > "${PROJECTNAME}/logs/insar_jupyter_${USER}_${HOSTNAME}.log" 2>&1 &
