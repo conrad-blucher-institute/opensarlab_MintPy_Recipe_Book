@@ -17,10 +17,12 @@ PORT=$3
 mkdir -m 775 -p "$(pwd)/$PROJECTNAME/logs"
 mkdir -m 775 -p "$(pwd)/$PROJECTNAME/home"
 mkdir -m 775 -p "$(pwd)/$PROJECTNAME/data"
-mkdir -m 775 -p "$(pwd)/$PROJECTNAME/home/.local/envs"
 
 # Clone Git repo
 git clone https://github.com/conrad-blucher-institute/opensarlab_MintPy_Recipe_Book.git "$PROJECTNAME/home"
+
+# Make local environment folder after cloning repo
+mkdir -m 775 -p "$(pwd)/$PROJECTNAME/home/.local/envs"
 
 # Start the Singularity instance with mounted home directory and specified hostname, and log the output
 singularity instance start -B $(pwd)/"${PROJECTNAME}"/home:/home/jovan --hostname $HOSTNAME earthscope_insar_oct_2024_latest.sif insar_jupyter_"${USER}"_"${PROJECTNAME}"  > "$PROJECTNAME/logs/singularity_start__${USER}_${HOSTNAME}.log" 2>&1
