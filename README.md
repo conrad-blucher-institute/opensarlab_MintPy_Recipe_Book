@@ -10,19 +10,27 @@ There may be an EarthScope InSAR Docker Image available on the HPC already (as o
 
 Clone the following repository:
 ```bash
-git clone https://github.com/ASFOpenSARlab/opensarlab-docker.git
+git clone https://github.com/ASFOpenSARlab/osl-image
 ```
 
 ### Step 2: Build the container
 
-Run the `build.sh` script to build this container. For *Earthscope_InSAR_2024*, the path to this script in the repository is `Earthscope_InSAR_2024/insar/build.sh`
+Use the Dockerfile located inside the `osl_mintpy` folder to build an image for our MintPy JupyterLab environment.
+
+```bash
+cd osl_mintpy
+docker build -t osl_mintpy .
+```
+
+This command will build a local image named `osl_mintpy`.
 
 ### Step 3: Push to DockerHub
 
 Create a [DockerHub](https://hub.docker.com/) account if you don't have one yet, and create a repository for your image.
-Then, retag the image file you created by running the following command, substituting values with the path to the image you created, your username, and your Docker repository name:
+Then, log into Docker from the command-line, and retag the image file you created by running the following command, substituting values with the path to the image you created, your username, and your Docker repository name:
 ```bash
-docker tag <local_image_path> your_username/your_repository:latest 
+docker login
+docker tag osl_mintpy your_username/your_repository:latest 
 ```
 Finally, push the image to DockerHub with the following command, substituting values with your username and your Docker repository name:
 ```bash
@@ -88,6 +96,13 @@ On local machine    | http://127.0.0.1:31613/lab?token=abcde...
 ```
 
 Finally, you can access the Jupyter instance in your web browser!
+
+> A note on kernels:
+> The `conda env:opensarlab_mintpy_recipe_book` environment is the one compiled in the image itself, located in `/opt/conda/envs/opensarlab_mintpy_recipe_book` in the container.
+> 
+> ![kernel selection screenshot](select_kernel.png)
+> 
+> The `conda env:.local-opensarlab_mintpy_recipe_book` environment, if shown, is on the host system. If the image is outdated but you'd like to run a job anyway, you can run notebook 1 (`1_Software_Environment.ipynb`) to install this host-system environment, and use it to ensure that the code blocks are executing using [the latest packages from the newest `environment(_locked).yaml` file](https://github.com/ASFOpenSARlab/opensarlab_MintPy_Recipe_Book/blob/main/environment_locked.yaml). You will also need the local environment to run the slurmjob in notebook 3 (`3_Access_HyP3_Data.ipynb`).
 
 ## Maintaining this repository
 
