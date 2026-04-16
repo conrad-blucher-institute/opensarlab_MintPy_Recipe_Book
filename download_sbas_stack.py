@@ -9,6 +9,7 @@ import argparse
 import zipfile
 
 def migrate_sbas_stack(
+    hyp3_access,
     data_path, 
     new_stack, 
     hyp3_username, 
@@ -22,6 +23,7 @@ def migrate_sbas_stack(
     Migrate an SBAS stack using specified parameters.
 
     Parameters:
+    - hyp3_access: Whether to access HyP3 or HyP3+
     - data_path: Path to store migrated data
     - new_stack: Whether to create a new data directory
     - hyp3_username: HyP3 username
@@ -47,7 +49,10 @@ def migrate_sbas_stack(
     print(f"Using data path: {data_path}")
 
     # Step 2: Authenticate with HyP3
-    hyp3 = HyP3(username=hyp3_username, password=hyp3_password)
+    if "Basic" in hyp3_access:
+        hyp3 = HyP3(username=hyp3_username, password=hyp3_password)
+    else:
+        hyp3 = HyP3(api_url="https://hyp3-plus.asf.alaska.edu", username=hyp3_username, password=hyp3_password)
 
     # Step 3: Retrieve project data
     if hyp3_project_name:
@@ -149,6 +154,7 @@ def migrate_sbas_stack(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Migrate SBAS stack data")
+    parser.add_argument("--hyp3-access", required=True, help="Whether to access HyP3 Basic ('Basic') or HyP3+ ('HyP3+')")
     parser.add_argument("--data-path", required=True, help="Path to store migrated data")
     parser.add_argument("--new-stack", type=bool, default=True, help="Create a new data directory (default: True)")
     parser.add_argument("--hyp3-username", required=True, help="HyP3 username")
@@ -170,6 +176,7 @@ if __name__ == "__main__":
         args.flight_path = int(args.flight_path)
 
     migrate_sbas_stack(
+        hyp3_access=args.hyp3_access,
         data_path=args.data_path,
         new_stack=args.new_stack,
         hyp3_username=args.hyp3_username,
